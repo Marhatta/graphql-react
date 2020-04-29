@@ -2,23 +2,19 @@ import React from 'react';
 import { gql } from 'apollo-boost';
 import { useQuery } from '@apollo/react-hooks';
 
-const GET_BOOKS = gql`
-    {
-        books{
-            name
-            id
-        }
-    }
-`;
 
+import { GET_BOOKS } from "../queries/queries";
 
 function BookList() {
-    const { loading, error, data } = useQuery(GET_BOOKS);
-    console.log(loading,error,data);
+const { loading, error, data } = useQuery(GET_BOOKS);
+
+  if (loading) return 'Loading...';
+  if (error) return `Error! ${error.message}`;
+
   return (
     <div>
         <ul id='book-list'>
-            <li>Book name</li>
+            {data.books.map(book => <li key={book.id}>{book.name}</li> )}
         </ul>
     </div>
   );
